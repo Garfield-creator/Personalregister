@@ -14,7 +14,7 @@ class EmployeeRegister
             Console.WriteLine("[1] Ny personal");
             Console.WriteLine("[2] Ta bort personal");
             Console.WriteLine("[3] Skriv ut register");
-            Console.WriteLine("[4] Avsluta\n");
+            Console.WriteLine("[0] Avsluta\n");
             string choice_input = Console.ReadLine()!;
             Console.WriteLine("");
             if (choice_input != null && int.TryParse(choice_input, out int choice))
@@ -89,13 +89,15 @@ class EmployeeRegister
                     case 3:
                         registry = [.. registry.OrderBy(s => s.Name)];
                         Console.WriteLine("Register:");
+                        Console.WriteLine("Namn".PadRight(30) + " Lön");
+                        Console.WriteLine("------------------------------");
                         foreach (var emplyee in registry)
                         {
-                            Console.WriteLine(emplyee.Name + " " + emplyee.Wage);
+                            Console.WriteLine(emplyee.Name.PadRight(30) + " " + emplyee.Wage);
                         }
                         Console.WriteLine("");
                         break;
-                    case 4:
+                    case 0:
                         Console.WriteLine("Tack för att du använde personalregistret!\n");
                         exit = true;
                         break;
