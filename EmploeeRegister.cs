@@ -12,9 +12,11 @@ class EmployeeRegister
         {
             Console.WriteLine("Meny:");
             Console.WriteLine("[1] Ny personal");
-            Console.WriteLine("[2] Skriv ut register");
-            Console.WriteLine("[3] Avsluta\n");
+            Console.WriteLine("[2] Ta bort personal");
+            Console.WriteLine("[3] Skriv ut register");
+            Console.WriteLine("[4] Avsluta\n");
             string choice_input = Console.ReadLine()!;
+            Console.WriteLine("");
             if (choice_input != null && int.TryParse(choice_input, out int choice))
             {
                 switch (choice)
@@ -55,23 +57,53 @@ class EmployeeRegister
                         break;
                     case 2:
                         registry = [.. registry.OrderBy(s => s.Name)];
-                        Console.WriteLine("");
+                        Console.WriteLine("Vem vill du ta bort?");
+                        for (int i = 0; i < registry.Count; i++)
+                        {
+                            Console.WriteLine("[" + (i+1) + "]" + " " + registry[i].Name);
+                        }
+                        Console.WriteLine("[0] Avbryt");
+                        string remove_input = Console.ReadLine() ?? "";
+                        int remove;
+                        if(!int.TryParse(remove_input, out remove))
+                        {
+                            Console.WriteLine("Ej giltit val. Försök igen.\n");
+                            goto case 2;
+                        }
+                        if(remove == 0)
+                        {
+                            Console.WriteLine("Avbryter!\n");
+                            break;
+                        }
+                        else if (remove < 0 || remove > registry.Count)
+                        {
+                            Console.WriteLine("[0] Ej giltit val. Försök igen.\n");
+                            goto case 2;
+                        }
+                        else
+                        {
+                            Console.WriteLine(registry[remove - 1].Name + " har tagits bort!\n");
+                            registry.RemoveAt(remove - 1);
+                            break;
+                        }
+                    case 3:
+                        registry = [.. registry.OrderBy(s => s.Name)];
                         Console.WriteLine("Register:");
                         foreach (var emplyee in registry)
                         {
-                            Console.WriteLine(emplyee);
+                            Console.WriteLine(emplyee.Name + " " + emplyee.Wage);
                         }
                         Console.WriteLine("");
                         break;
-                    case 3:
-                        Console.WriteLine("Tack för att du använde personalregistret!");
+                    case 4:
+                        Console.WriteLine("Tack för att du använde personalregistret!\n");
                         exit = true;
                         break;
                 }
             }
             else
             {
-                Console.WriteLine("Ej giltit val. Försök igen.");
+                Console.WriteLine("Ej giltit val. Försök igen.\n");
             }
             Console.WriteLine("=========================");
         }
@@ -90,10 +122,5 @@ class Employee
         Name = name;
         Wage = wage;
         Console.WriteLine(name + " tillagd!");
-    }
-
-    public override string ToString()
-    {
-        return (Name + " " + Wage).ToString();
     }
 }
