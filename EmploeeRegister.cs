@@ -13,50 +13,55 @@ class EmployeeRegister
             Console.WriteLine("Meny:");
             Console.WriteLine("[1] Ny personal");
             Console.WriteLine("[2] Skriv ut register");
-            Console.WriteLine("[3] Avsluta");
-            string choice_input = Console.ReadLine();
+            Console.WriteLine("[3] Avsluta\n");
+            string choice_input = Console.ReadLine()!;
             if (choice_input != null && int.TryParse(choice_input, out int choice))
             {
                 switch (choice)
                 {
                     case 1:
                         Console.WriteLine("Namn på den nya personalen? Skriv 'avbryt' för att avbryta.");
-                        string name = Console.ReadLine();
+                        string name = Console.ReadLine() ?? "";
                         if (string.Equals(name, "avbryt"))
                         {
+                            Console.WriteLine("Avbryter!\n");
                             break;
                         }
-                        else if (name == null)
+                        else if (name == "")
                         {
-                            break;
+                            goto case 1;
                         }
+                        WageInput:
                         Console.WriteLine("Lön till den nya personalen? Skriv 'avbryt' för att avbryta.");
-                        string wage_input = Console.ReadLine();
+                        string wage_input = Console.ReadLine() ?? "";
                         int wage;
                         if (string.Equals(wage_input, "avbryt"))
                         {
+                            Console.WriteLine("Avbryter!\n");
                             break;
                         }
-                        else if (wage_input == null)
+                        else if (wage_input == "")
                         {
-                            break;
+                            Console.WriteLine("Lön är obligatorisk!\n");
+                            goto WageInput;
                         }
                         else if (!int.TryParse(wage_input, out wage))
                         {
-                            break;
+                            Console.WriteLine("Lön måste vara i hela kronor!\n");
+                            goto WageInput;
                         }
                         registry.Add(new Employee(name, wage));
+                        Console.WriteLine("");
+                        break;
+                    case 2:
+                        registry = [.. registry.OrderBy(s => s.Name)];
+                        Console.WriteLine("");
+                        Console.WriteLine("Register:");
                         foreach (var emplyee in registry)
                         {
                             Console.WriteLine(emplyee);
                         }
-                        break;
-                    case 2:
-                        registry = [.. registry.OrderBy(s => s.Name)];
-                        foreach(var emplyee in registry)
-                        {
-                            Console.WriteLine(emplyee);
-                        }
+                        Console.WriteLine("");
                         break;
                     case 3:
                         Console.WriteLine("Tack för att du använde personalregistret!");
@@ -68,6 +73,7 @@ class EmployeeRegister
             {
                 Console.WriteLine("Ej giltit val. Försök igen.");
             }
+            Console.WriteLine("=========================");
         }
     }
 }
